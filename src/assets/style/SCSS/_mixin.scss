@@ -1,0 +1,74 @@
+@mixin pc {
+    @media(min-width:975px){
+        @content;
+    }
+}
+@mixin pad {
+    @media(max-width:974px){
+        @content;
+    }
+}
+@mixin mobile {
+    @media(max-width:768px){
+        @content;
+    }
+}
+
+@mixin transition ($second){
+    transition: all $second ease;
+}
+
+@mixin aHoverLine($font-color,$bg-color,$second) {
+    position: relative;
+    &:hover {
+        color: $font-color;
+    }
+    &::after {
+        content: "";
+        position: absolute;
+        width: 0%;
+        height: 1px;
+        bottom: 0;
+        left: 0;
+        background-color: $bg-color;
+        @include transition($second);
+    }
+    &:hover::after{
+        width: 100%;
+        height: 1px;
+    }
+}
+@mixin aHoverWidth($bg-color,$second) {
+    position: relative;
+    &::after {
+        content: "";
+        position: absolute;
+        width: 120%;
+        height: 1px;
+        bottom: 0;
+        right: 0;
+        background-color: $bg-color;
+        @include transition($second);
+    }
+    &:hover::after{
+        width: 100%;
+        height: 1px;
+    }
+}
+
+@mixin aHoverColor($color,$bg-color){
+    @include transition (.2s);
+    &:hover {
+        color: $color;
+        background-color: $bg-color;
+        // border: 1px solid $color;
+    }
+}
+@mixin imgHover {
+    @include transition(.2s);
+    &:hover {
+        opacity: .9;
+        transform: scale(1.1);
+        @include transition(.2s);
+    }
+}

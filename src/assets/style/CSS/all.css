@@ -1,0 +1,476 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  color: #525151;
+  font-family: 'Poppins','Noto Sans TC', sans-serif;
+  font-size: 16px;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+*, *::before, *::after {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+section {
+  margin-bottom: 80px;
+}
+
+@media (min-width: 975px) {
+  section {
+    margin-bottom: 120px;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  display: inline-block;
+  color: #525151;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.card {
+  border: none;
+  height: 100%;
+  -webkit-box-shadow: #ccc 3px 3px 6px;
+          box-shadow: #ccc 3px 3px 6px;
+}
+
+.card h5 {
+  margin-bottom: 0;
+  color: #525151;
+  font-weight: bold;
+  line-height: 23px;
+}
+
+.card span {
+  color: #6F7789;
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.card .card-img-block {
+  height: 150px;
+  overflow: hidden;
+}
+
+@media (max-width: 974px) {
+  .card .card-img-block {
+    height: 200px;
+  }
+}
+
+.card .card-img-block img {
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center center;
+     object-position: center center;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.card .card-img-block img:hover {
+  opacity: .9;
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.card .card-text i {
+  color: #08A6BB;
+  font-size: 15px;
+}
+
+.card .card-btn {
+  display: inline-block;
+  margin: auto;
+  margin-bottom: 24px;
+  padding: 8px 60px;
+  background-color: #fff;
+  border: 4px solid #08A6BB;
+  border-radius: 10px;
+  color: #08A6BB;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.modal .modal-dialog {
+  max-width: 750px;
+}
+
+@media (max-width: 768px) {
+  .modal .modal-dialog {
+    max-width: 500px;
+  }
+}
+
+.modal .modal-content {
+  padding: 16px;
+  line-height: 24px;
+  text-align: justify;
+}
+
+.modal h5 {
+  color: #393939;
+  font-weight: 900;
+}
+
+.modal .btn {
+  padding: 2px 8px;
+  background-color: #c8c8c8;
+  color: #fff;
+}
+
+.modal .modal-body {
+  color: #6F7789;
+}
+
+.modal .modal-body i {
+  color: #08A6BB;
+}
+
+.modal img {
+  width: 100%;
+}
+
+.modal li {
+  color: #08A6BB;
+  line-height: 32px;
+}
+
+@media (max-width: 768px) {
+  .modal li {
+    font-size: 14px;
+  }
+}
+
+.fs-sm {
+  font-size: 14px;
+}
+
+.section-margin {
+  margin-bottom: 80px;
+}
+
+@media (min-width: 975px) {
+  .section-margin {
+    margin-bottom: 120px;
+  }
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #08A6BB;
+  border-color: #08A6BB;
+}
+
+.pagination .page-link {
+  color: #525151;
+  border: none;
+}
+
+.pagination .page-link:hover {
+  background-color: #08A6BB;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .pagination .page-link {
+    padding: 8px 8px;
+    font-size: 14px;
+  }
+}
+
+.max-h-80 {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 80px;
+  max-height: 80px;
+  z-index: 100;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid #eee;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .max-h-80 {
+    height: 100px;
+    max-height: 100px;
+  }
+}
+
+.everyPage {
+  padding-top: 80px;
+}
+
+@media (max-width: 768px) {
+  .everyPage {
+    padding-top: 100px;
+  }
+}
+
+h1 {
+  width: 220px;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    margin: 0 auto;
+    padding: 10px;
+  }
+}
+
+h3 {
+  color: #08A6BB;
+  font-weight: bold;
+  font-size: 30px;
+  line-height: 35px;
+}
+
+h5 {
+  font-size: 20px;
+}
+
+.subtitle {
+  color: #AEAEAE;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+a.nav-link {
+  color: #525151;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+a.nav-link.active, a.nav-link:hover {
+  color: #08A6BB;
+}
+
+.banner {
+  margin-bottom: 120px;
+}
+
+@media (max-width: 768px) {
+  .banner {
+    margin-bottom: 60px;
+  }
+}
+
+.carousel-item {
+  height: 600px;
+}
+
+@media (max-width: 768px) {
+  .carousel-item {
+    height: 400px;
+  }
+}
+
+.carousel-item img {
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center center;
+     object-position: center center;
+}
+
+.bannerContent h2 {
+  text-shadow: #333 2px 2px 5px;
+  line-height: 40px;
+}
+
+.bannerContent .form-select {
+  border: none;
+  color: #6F7789;
+  font-size: 16px;
+  text-align: center;
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  .bannerContent .form-select {
+    font-size: 14px;
+  }
+}
+
+.bannerContent .categorySelector {
+  width: 200px;
+}
+
+@media (max-width: 768px) {
+  .bannerContent .categorySelector {
+    width: auto;
+    padding: 0 25px;
+  }
+}
+
+.bannerContent .citySelector {
+  width: 300px;
+}
+
+@media (max-width: 768px) {
+  .bannerContent .citySelector {
+    width: auto;
+    padding: 0 32px;
+  }
+}
+
+.bannerContent .searchBtn {
+  padding: 12px;
+  background-color: #08A6BB;
+  border: none;
+  border-radius: 8px;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.bannerContent .searchBtn:hover {
+  color: #fff;
+  background-color: #55b2be;
+}
+
+.event ::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .event .row {
+    overflow: scroll;
+    -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+  }
+}
+
+.event .event-img {
+  height: 350px;
+  border-radius: .25rem;
+  overflow: hidden;
+}
+
+.event .event-img img {
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center center;
+     object-position: center center;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.event .event-img img:hover {
+  opacity: .9;
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.event a:hover {
+  color: #525151;
+}
+
+footer .footer-content {
+  padding: 120px 0;
+  background-image: url("https://images.unsplash.com/photo-1620831098784-2eec2323cc5b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1974&q=80");
+  background-position: center center;
+  background-size: cover;
+  color: #fff;
+  font-size: 32px;
+  font-weight: bold;
+  text-shadow: #333 2px 2px 5px;
+  line-height: 37px;
+  text-align: center;
+}
+
+footer .footer-content span {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+footer .copyright {
+  padding: 48px 0;
+  background-color: #08A6BB;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.go-top {
+  position: fixed;
+  right: 30px;
+  bottom: 100px;
+  width: 46px;
+  height: 46px;
+  border-radius: 100%;
+  -webkit-box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  background-color: #08A6BB;
+  text-align: center;
+}
+
+.go-top a {
+  color: #fff;
+  line-height: 46px;
+}
+/*# sourceMappingURL=all.css.map */
