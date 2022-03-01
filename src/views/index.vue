@@ -3,87 +3,43 @@
     <div class="banner position-relative" id="banner">
       <div id="carouselBanner" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
-          <button
-            type="button"
-            data-bs-target="#carouselBanner"
-            data-bs-slide-to="0"
-            class="active"
-            aria-current="true"
-            aria-label="Slide 1"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#carouselBanner"
-            data-bs-slide-to="1"
-            aria-label="Slide 2"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#carouselBanner"
-            data-bs-slide-to="2"
-            aria-label="Slide 3"
-          ></button>
+          <button type="button" data-bs-target="#carouselBanner" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#carouselBanner" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#carouselBanner" data-bs-slide-to="2" aria-label="Slide 3"></button>
         </div>
         <div class="carousel-inner">
-          <div
-            class="carousel-item"
-            v-for="(item, index) in bannerData"
-            :key="index"
-            :class="{ active: index === 0 }"
-          >
+          <div class="carousel-item" v-for="(item, index) in bannerData" :key="index" :class="{ active: index === 0 }">
             <img :src="item.imgUrl" class="d-block w-100" :alt="item.alt" />
           </div>
         </div>
       </div>
-      <div
-        class="bannerContent position-absolute top-50 start-50 translate-middle"
-      >
+
+      <div class="bannerContent position-absolute top-50 start-50 translate-middle">
         <h2 class="pb-3 fs-2 text-white text-center">
           Welcome to<br class="d-md-none" />
           Travel Taiwan
         </h2>
-        <form class="d-flex">
-          <select
-            v-model="category"
-            class="form-select mx-1 mx-md-2 categorySelector text-center"
-            id="categorySelector"
-            aria-label="category select"
-          >
+
+        <form class="d-flex" @submit.prevent="submit()">
+          <select v-model="category" class="form-select mx-1 mx-md-2 categorySelector text-center" id="categorySelector" aria-label="category select">
             <option value="" disabled selected>類別</option>
-            <option
-              :value="item.value"
-              v-for="item in categoryList"
-              :key="item.id"
-            >
+            <option :value="item.value" v-for="item in categoryList" :key="item.id">
               {{ item.label }}
             </option>
           </select>
-          <select
-            v-model="city"
-            class="form-select mx-1 mx-md-2 citySelector"
-            id="citySelector"
-            aria-label="city select"
-          >
+          <select v-model="city" class="form-select mx-1 mx-md-2 citySelector" id="citySelector" aria-label="city select">
             <option value="" disabled selected>請選擇縣市</option>
-            <option
-              v-for="item in cityData"
-              :value="item.City"
-              :key="item.City"
-            >
+            <option v-for="item in cityData" :value="item.City" :key="item.City">
               {{ item.CityName }}
             </option>
           </select>
-          <button
-            type="send"
-            class="searchBtn mx-1 mx-md-2"
-            id="searchBtn"
-            @click="search()"
-          >
+          <button type="submit" class="searchBtn mx-1 mx-md-2" id="searchBtn">
             <i class="bi bi-search text-white fs-6"></i>
           </button>
         </form>
       </div>
     </div>
+
     <section class="hotAttractions">
       <div class="container">
         <h3 class="pb-3">熱門景點</h3>
@@ -91,64 +47,35 @@
           台灣的各個美景，都美不勝收。<br />
           等你一同來發現這座寶島的奧妙！
         </p>
+
         <div class="row">
-          <div
-            class="col-12 col-md-6 col-lg-3 mb-5"
-            v-for="item in hotAttractions"
-            :key="item.id"
-          >
+          <div class="col-12 col-md-6 col-lg-3 mb-5" v-for="item in hotAttractions" :key="item.id">
             <div class="card">
               <div class="card-img-block">
-                <img
-                  :src="item.image.imgUrl"
-                  class="card-img-top"
-                  :alt="item.image.alt"
-                />
+                <img :src="item.image.imgUrl" class="card-img-top" :alt="item.image.alt" />
               </div>
               <div class="card-body">
                 <h5 class="card-title pb-1">{{ item.name }}</h5>
-                <span
-                  ><i class="bi bi-clock pe-1"></i
-                  >{{ item.infos.openTime }}</span
-                >
-                <p class="card-text pt-3">
-                  <i class="bi bi-geo-alt-fill pe-1"></i>{{ item.city }}
-                </p>
+                <span><i class="bi bi-clock pe-1"></i>{{ item.infos.openTime }}</span>
+                <p class="card-text pt-3"><i class="bi bi-geo-alt-fill pe-1"></i>{{ item.city }}</p>
               </div>
-              <a
-                href="#"
-                class="card-btn"
-                data-bs-toggle="modal"
-                :data-bs-target="'#' + item.name"
-                >了解更多</a
-              >
+              <a href="#" class="card-btn" data-bs-toggle="modal" :data-bs-target="'#' + item.name">了解更多</a>
             </div>
-            <div
-              class="modal fade"
-              :id="item.name"
-              tabindex="-1"
-              aria-labelledby="attractions1Label"
-              aria-hidden="true"
-            >
+
+            <div class="modal fade" :id="item.name" tabindex="-1" aria-labelledby="attractions1Label" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header border-0">
                     <h5 class="modal-title" id="attractions1Label">
                       {{ item.name }}
                     </h5>
-                    <button
-                      type="button"
-                      class="btn"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    >
+                    <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close">
                       <i class="bi bi-x-lg"></i>
                     </button>
                   </div>
+
                   <div class="modal-body">
-                    <p class="fs-sm pb-3">
-                      <i class="bi bi-geo-alt-fill pe-1"></i>{{ item.address }}
-                    </p>
+                    <p class="fs-sm pb-3"><i class="bi bi-geo-alt-fill pe-1"></i>{{ item.address }}</p>
                     <p class="pb-3 pb-md-5">
                       {{ item.descriptionDetail }}
                     </p>
@@ -158,23 +85,13 @@
                       </div>
                     </div>
                   </div>
+
                   <div class="modal-footer border-0 justify-content-between">
                     <ul class="d-block d-md-flex flex-wrap">
-                      <li class="pe-4">
-                        <i class="bi bi-clock pe-1"></i
-                        >{{ item.infos.openTime }}
-                      </li>
-                      <li class="pe-4">
-                        <i class="bi bi-ticket pe-1"></i
-                        >{{ item.infos.ticketInfo }}
-                      </li>
-                      <li class="pe-4">
-                        <i class="bi bi-telephone pe-1"></i>{{ item.infos.tel }}
-                      </li>
-                      <li class="pe-4">
-                        <i class="bi bi-list-ul pe-1"></i
-                        >{{ item.infos.spotClass }}
-                      </li>
+                      <li class="pe-4"><i class="bi bi-clock pe-1"></i>{{ item.infos.openTime }}</li>
+                      <li class="pe-4"><i class="bi bi-ticket pe-1"></i>{{ item.infos.ticketInfo }}</li>
+                      <li class="pe-4"><i class="bi bi-telephone pe-1"></i>{{ item.infos.tel }}</li>
+                      <li class="pe-4"><i class="bi bi-list-ul pe-1"></i>{{ item.infos.spotClass }}</li>
                     </ul>
                   </div>
                 </div>
@@ -184,6 +101,7 @@
         </div>
       </div>
     </section>
+
     <section class="event" data-aos="fade-up">
       <div class="container">
         <h3 class="pb-3">活動類別</h3>
@@ -191,12 +109,9 @@
           各種不同的活動內容<br />
           邀請您一同來共襄盛舉！
         </p>
+
         <div class="row">
-          <div
-            class="col-9 col-md-6 col-lg-3 mb-5"
-            v-for="item in eventData"
-            :key="item.id"
-          >
+          <div class="col-9 col-md-6 col-lg-3 mb-5" v-for="item in eventData" :key="item.id">
             <a href="./event.html" @click.prevent="goEvent(item.eventName)">
               <div class="card">
                 <div class="event-img">
@@ -223,18 +138,15 @@ export default {
       city: "",
       bannerData: [
         {
-          imgUrl:
-            "https://images.unsplash.com/photo-1470004914212-05527e49370b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&h=800&q=80",
+          imgUrl: "https://images.unsplash.com/photo-1470004914212-05527e49370b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&h=800&q=80",
           alt: "台北101",
         },
         {
-          imgUrl:
-            "https://images.unsplash.com/photo-1621848296279-7751546e9acc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&h=800&q=80",
+          imgUrl: "https://images.unsplash.com/photo-1621848296279-7751546e9acc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1400&h=800&q=80",
           alt: "台江國家公園",
         },
         {
-          imgUrl:
-            "https://images.unsplash.com/photo-1532516993453-addb6c882c42?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&h=800&q=80",
+          imgUrl: "https://images.unsplash.com/photo-1532516993453-addb6c882c42?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&h=800&q=80",
           alt: "新月橋",
         },
       ],
@@ -418,13 +330,11 @@ export default {
           name: "清境農場",
           city: "南投縣仁愛鄉",
           image: {
-            imgUrl:
-              "http://travel.nantou.gov.tw/manasystem/files/scenic/20140310095216_清境農場青青草原-1.jpg",
+            imgUrl: "http://travel.nantou.gov.tw/manasystem/files/scenic/20140310095216_清境農場青青草原-1.jpg",
             alt: "青青草原",
           },
           address: "南投縣仁愛鄉大同村仁和路170號",
-          descriptionDetail:
-            "清境農場四季景致秀麗，各有趣味，信步其中可盡覽清境之美：碧湖映壽、步步高升、慈雲獻壽、青青草原、果林飄香、心誠則靈，不妨細細品味高山原野自然恬靜的氣氛。廣義的清境，包含退輔會清境農場及周邊地區，南起霧社，北至梅峰，省道台14甲線貫穿其間，青青草原、觀山牧區、壽山園生態區、步步高升至小瑞士花園為主要賞景與遊憩動線。",
+          descriptionDetail: "清境農場四季景致秀麗，各有趣味，信步其中可盡覽清境之美：碧湖映壽、步步高升、慈雲獻壽、青青草原、果林飄香、心誠則靈，不妨細細品味高山原野自然恬靜的氣氛。廣義的清境，包含退輔會清境農場及周邊地區，南起霧社，北至梅峰，省道台14甲線貫穿其間，青青草原、觀山牧區、壽山園生態區、步步高升至小瑞士花園為主要賞景與遊憩動線。",
           infos: {
             openTime: "08：00~17：00",
             ticketInfo: "免費入場",
@@ -473,8 +383,7 @@ export default {
           name: "福隆海水浴場",
           city: "新北市貢寮區",
           image: {
-            imgUrl:
-              "https://newtaipei.travel/content/images/attractions/25573/640x480_attractions-image-6ritkukt_0onivc3vaclvq.jpg",
+            imgUrl: "https://newtaipei.travel/content/images/attractions/25573/640x480_attractions-image-6ritkukt_0onivc3vaclvq.jpg",
             alt: "風帆與沙雕",
           },
           address: "新北市228貢寮區福隆里福隆街42號",
@@ -491,33 +400,30 @@ export default {
       eventData: [
         {
           id: 1,
-          imgUrl:
-            "https://images.unsplash.com/photo-1498931299472-f7a63a5a1cfa?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=350&q=80",
+          imgUrl: "https://images.unsplash.com/photo-1498931299472-f7a63a5a1cfa?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=350&q=80",
           eventName: "年度活動",
         },
         {
           id: 2,
-          imgUrl:
-            "https://images.unsplash.com/photo-1576948676327-46cb0e272a69?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=350&q=80",
+          imgUrl: "https://images.unsplash.com/photo-1576948676327-46cb0e272a69?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=350&q=80",
           eventName: "藝文活動",
         },
         {
           id: 3,
-          imgUrl:
-            "https://images.unsplash.com/photo-1568119948624-ff9807d6be20?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=350&q=80",
+          imgUrl: "https://images.unsplash.com/photo-1568119948624-ff9807d6be20?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=350&q=80",
           eventName: "節慶活動",
         },
         {
           id: 4,
-          imgUrl:
-            "https://images.unsplash.com/photo-1447401097745-cd48a83da97f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=350&q=80",
+          imgUrl: "https://images.unsplash.com/photo-1447401097745-cd48a83da97f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=350&q=80",
           eventName: "其他活動",
         },
       ],
     };
   },
   methods: {
-    search() {
+    submit() {
+      console.log(this.category, this.city);
       this.$router.push({
         path: "/attractions",
         query: {
