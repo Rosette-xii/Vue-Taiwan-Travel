@@ -321,6 +321,7 @@ export default {
       } else {
         this.height = this.$refs.scrollPoint.offsetTop + this.$refs.scrollPoint.offsetHeight;
       }
+      window.scrollTo(0, this.height);
     },
     reset() {
       this.currentPage = 0;
