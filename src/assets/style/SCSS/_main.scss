@@ -94,21 +94,29 @@
 	margin-bottom: 80px;
 }
 .pagination {
-    .page-item.active .page-link {
-        background-color: $branding-color;
-        border-color:$branding-color;
-    }
+    display: flex;
+    justify-content: center;
     .page-link {
         color: $main-color;
         border: none;
+        cursor: pointer;
         &:hover {
             background-color: $branding-color;
             color: #fff;
+        }
+        &:disabled {
+            pointer-events: none;
+            opacity: .65;
         }
         @include mobile {
             padding: 8px 8px;
             font-size: 14px;
         }
+    }
+    .active {
+        color: #fff;
+        background-color: $branding-color;
+        border-color:$branding-color;
     }
 }
 .max-h-80 {

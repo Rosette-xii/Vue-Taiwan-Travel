@@ -152,6 +152,10 @@ export default {
       ],
       cityData: [
         {
+          CityName: "台灣",
+          City: "Taiwan",
+        },
+        {
           CityName: "臺北市",
           City: "Taipei",
         },
@@ -423,7 +427,6 @@ export default {
   },
   methods: {
     submit() {
-      console.log(this.category, this.city);
       this.$router.push({
         path: "/attractions",
         query: {

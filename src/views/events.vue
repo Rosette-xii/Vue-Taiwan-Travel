@@ -31,7 +31,7 @@
               {{ item.CityName }}
             </option>
           </select>
-          <button type="button" class="searchBtn mx-1 mx-md-2" id="searchBtn" @click="getEventData()">
+          <button type="button" class="searchBtn mx-1 mx-md-2" id="searchBtn" @click="getEventData">
             <i class="bi bi-search text-white fs-6"></i>
           </button>
         </form>
@@ -45,7 +45,7 @@
           邀請您一同來共襄盛舉！
         </p>
         <div class="row">
-          <div class="col-12 col-md-6 col-lg-3 mb-5" v-for="(item, index) in pageData" :key="index">
+          <div class="col-12 col-md-6 col-lg-3 mb-5" v-for="(item, index) in dataShow" :key="index">
             <div class="card" data-aos="fade-up">
               <div class="card-img-block">
                 <img :src="item.Picture.PictureUrl1 || require('../assets/images/noImage.jpg')" :alt="item.Picture.PictureDescription1 || item.ActivityName" class="card-img-top" />
@@ -93,9 +93,13 @@
             </div>
           </div>
         </div>
-        <nav aria-label="Page navigation example d-flex">
-          <ul class="pagination justify-content-center" id="pageId" @click.prevent="switchPage($event)"></ul>
-        </nav>
+        <div class="pagination">
+          <button type="button" v-if="filterData.length != 0" @click="prePage" class="page-link" :disabled="currentPage === 0"><i class="bi bi-chevron-left"></i></button>
+          <span v-if="pageNum > 5 && currentPage > 2" class="d-flex align-items-center px-1"><i class="bi bi-three-dots"></i></span>
+          <span v-for="(i, index) in pageData(numArr)" :key="index" @click="page(i)" class="page-link" :class="{ active: i - 1 === currentPage }">{{ i }}</span>
+          <span v-if="pageNum > 5 && currentPage < pageNum - 3" class="d-flex align-items-center px-1"><i class="bi bi-three-dots"></i></span>
+          <button type="button" v-if="filterData.length != 0" @click="nextPage" class="page-link" :disabled="currentPage + 1 === pageNum"><i class="bi bi-chevron-right"></i></button>
+        </div>
       </div>
     </section>
   </div>
@@ -107,13 +111,18 @@ export default {
   data() {
     return {
       category: "所有活動",
-      city: "",
+      city: "Taiwan",
       currentCity: "台灣",
       currentCategory: "所有活動",
       eventData: [],
       eventTimeData: [],
       filterData: [],
-      pageData: [],
+      numArr: [],
+      totalPage: [],
+      pageSize: 12,
+      pageNum: 1,
+      dataShow: [],
+      currentPage: 0,
       height: 0,
       bannerData: [
         {
@@ -130,6 +139,10 @@ export default {
         },
       ],
       cityData: [
+        {
+          CityName: "台灣",
+          City: "Taiwan",
+        },
         {
           CityName: "臺北市",
           City: "Taipei",
@@ -230,9 +243,15 @@ export default {
   },
   methods: {
     getEventData() {
+      let city = "";
+      if (this.city === "Taiwan") {
+        city = "";
+      } else {
+        city = this.city;
+      }
       this.axios({
         method: "get",
-        url: `https://ptx.transportdata.tw/MOTC/v2/Tourism/Activity/${this.city}`,
+        url: `https://ptx.transportdata.tw/MOTC/v2/Tourism/Activity/${city}`,
         headers: this.GetAuthorizationHeader(),
       })
         .then((response) => {
@@ -241,7 +260,6 @@ export default {
           this.cityTranslate();
           this.currentCategory = this.category;
           window.scrollTo(0, this.height);
-          this.pagination(1);
         })
         .catch((error) => {
           console.log("error", error);
@@ -262,166 +280,41 @@ export default {
       } else {
         this.filterData = this.eventData.filter((item) => item.Class1 === this.category || item.Class2 === this.category || item.Class3 === this.category);
       }
+      if (this.filterData.length === 0) {
+        alert("查無資料");
+        this.reset();
+        return;
+      }
+      this.pagination();
     },
     getEventTime() {
       this.pageData.forEach((item, i) => {
         this.pageData[i].time = item.StartTime.substr(0, 10) + "~" + item.EndTime.substr(0, 10);
       });
     },
-    pagination(nowPage) {
-      const dataTotal = this.filterData.length;
-      if (dataTotal === 0) {
-        alert("查無資料");
-        this.pageData = [];
-        document.querySelector("#pageId").innerHTML = "";
-        return;
-      }
-      const perPage = 12;
-      const pageTotal = Math.ceil(dataTotal / perPage);
-      let currentPage = nowPage;
-      if (currentPage > pageTotal) {
-        currentPage = pageTotal;
-      }
-      const minData = currentPage * perPage - perPage + 1;
-      const maxData = currentPage * perPage;
-      this.pageData = [];
-      this.filterData.forEach((item, index) => {
-        const num = index + 1;
-        if (num >= minData && num <= maxData) {
-          this.pageData.push(item);
-        }
-      });
-      this.getEventTime();
-      const page = {
-        pageTotal,
-        currentPage,
-        hasPage: currentPage > 1,
-        hasNext: currentPage < pageTotal,
-      };
-      this.pageBtn(page);
-    },
-    pageBtn(page) {
-      let str = "";
-      const total = page.pageTotal;
-      let nowPage = Number(page.currentPage);
-      if (this.eventData.length === 0) {
-        return;
-      } else {
-        if (page.hasPage) {
-          str += `
-        <li class="page-item"><a class="page-link" href="#" data-page="1"><i class="bi bi-chevron-double-left" data-page="1"></i></a></li>
-        <li class="page-item"><a class="page-link" href="#" data-page="${nowPage - 1}"><i class="bi bi-chevron-left" data-page="${nowPage - 1}"></i></a></li>
-        `;
-        } else {
-          str += `
-        <li class="page-item disabled"><span class="page-link"><i class="bi bi-chevron-double-left"></i></span></li>
-        <li class="page-item disabled"><span class="page-link"><i class="bi bi-chevron-left"></i></span></li>
-        `;
-        }
-        for (let i = 1; i <= total; i++) {
-          if (page.pageTotal <= 5) {
-            if (nowPage === i) {
-              str += `<li class="page-item active"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
-            } else {
-              str += `<li class="page-item"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
-            }
-          } else {
-            if (nowPage === 1) {
-              str += `
-                <li class="page-item active"><a class="page-link" href="#" data-page="1">1</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="2">2</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="3">3</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="4">4</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="5">5</a></li>
-                <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-                `;
-              break;
-            } else if (nowPage === 2) {
-              str += `
-                <li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>
-                <li class="page-item active"><a class="page-link" href="#" data-page="2">2</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="3">3</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="4">4</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="5">5</a></li>
-                <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-                `;
-              break;
-            } else if (nowPage === 3) {
-              str += `
-                <li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="2">2</a></li>
-                <li class="page-item active"><a class="page-link" href="#" data-page="3">3</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="4">4</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="5">5</a></li>
-                <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-                `;
-              break;
-            } else if (nowPage > 3 && nowPage <= total - 3) {
-              str += `
-                 <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="${nowPage - 2}">${nowPage - 2}</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="${nowPage - 1}">${nowPage - 1}</a></li>
-                <li class="page-item active"><a class="page-link" href="#" data-page="${nowPage}">${nowPage}</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="${nowPage + 1}">${nowPage + 1}</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="${nowPage + 2}">${nowPage + 2}</a></li>
-                <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-                `;
-              break;
-            } else if (nowPage === total - 2) {
-              str += `
-                <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="${total - 4}">${total - 4}</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="${total - 3}">${total - 3}</a></li>
-                <li class="page-item active"><a class="page-link" href="#" data-page="${total - 2}">${total - 2}</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="${total - 1}">${total - 1}</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="${total}">${total}</a></li>
-                `;
-              break;
-            } else if (nowPage === total - 1) {
-              str += `
-                <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="${total - 4}">${total - 4}</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="${total - 3}">${total - 3}</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="${total - 2}">${total - 2}</a></li>
-                <li class="page-item active"><a class="page-link" href="#" data-page="${total - 1}">${total - 1}</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="${total}">${total}</a></li>
-                `;
-              break;
-            } else if (nowPage === total) {
-              str += `
-                <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="${total - 4}">${total - 4}</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="${total - 3}">${total - 3}</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="${total - 2}">${total - 2}</a></li>
-                <li class="page-item"><a class="page-link" href="#" data-page="${total - 1}">${total - 1}</a></li>
-                <li class="page-item active"><a class="page-link" href="#" data-page="${total}">${total}</a></li>
-                `;
-              break;
-            }
-          }
-        }
-        if (page.hasNext) {
-          str += `
-        <li class="page-item"><a class="page-link" href="#" data-page="${Number(page.currentPage) + 1}"><i class="bi bi-chevron-right" data-page="${Number(page.currentPage) + 1}"></i></a></li>
-        <li class="page-item"><a class="page-link" href="#" data-page="${total}"><i class="bi bi-chevron-double-right" data-page="${total}"></i></a></li>
-        `;
-        } else {
-          str += `
-        <li class="page-item disabled"><span class="page-link"><i class="bi bi-chevron-right"></i></span></li>
-        <li class="page-item disabled"><span class="page-link"><i class="bi bi-chevron-double-right"></i></span></li>
-        `;
-        }
-        document.querySelector("#pageId").innerHTML = str;
-      }
-    },
-    switchPage(event) {
-      if (event.target.nodeName !== "A" && event.target.nodeName !== "I") {
-        return;
-      }
-      const page = event.target.dataset.page;
+    nextPage() {
+      if (this.currentPage === this.pageNum - 1) return;
+      this.dataShow = this.totalPage[++this.currentPage];
       this.getScrollHeight();
-      window.scrollTo(0, this.height);
-      this.pagination(page);
+    },
+    prePage() {
+      if (this.currentPage === 0) return;
+      this.dataShow = this.totalPage[--this.currentPage];
+      this.getScrollHeight();
+    },
+    page(i) {
+      this.currentPage = i - 1;
+      this.dataShow = this.totalPage[i - 1];
+      this.getScrollHeight();
+    },
+    pagination() {
+      this.pageNum = Math.ceil(this.filterData.length / this.pageSize) || 1;
+      this.reset();
+      for (let i = 0; i < this.pageNum; i++) {
+        this.numArr.push(i + 1);
+        this.totalPage[i] = this.filterData.slice(this.pageSize * i, this.pageSize * (i + 1));
+        this.dataShow = this.totalPage[this.currentPage];
+      }
     },
     getScrollHeight() {
       if (window.document.body.scrollWidth < 769) {
@@ -429,11 +322,17 @@ export default {
       } else {
         this.height = this.$refs.scrollPoint.offsetTop + this.$refs.scrollPoint.offsetHeight;
       }
+      window.scrollTo(0, this.height);
+    },
+    reset() {
+      this.currentPage = 0;
+      this.numArr = [];
+      this.totalPage = [];
+      this.dataShow = [];
     },
     GetAuthorizationHeader() {
       var AppID = "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF";
       var AppKey = "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF";
-
       var GMTString = new Date().toGMTString();
       var ShaObj = new jsSHA("SHA-1", "TEXT");
       ShaObj.setHMACKey(AppKey, "TEXT");
@@ -443,6 +342,19 @@ export default {
       return {
         Authorization: Authorization,
         "X-Date": GMTString,
+      };
+    },
+  },
+  computed: {
+    pageData() {
+      return (data) => {
+        if (this.pageNum <= 5 || this.currentPage <= 2) {
+          return data.filter((i) => i <= 5);
+        } else if (this.currentPage > 2 && this.currentPage < this.pageNum - 2) {
+          return [this.currentPage - 1, this.currentPage, this.currentPage + 1, this.currentPage + 2, this.currentPage + 3];
+        } else {
+          return data.filter((i) => i > this.pageNum - 5);
+        }
       };
     },
   },
